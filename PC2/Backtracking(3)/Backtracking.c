@@ -6,15 +6,15 @@ char answer[6];
 char option[6];
 int position[6];
 char letters[6];
-void get_answer()
+void get_answer(FILE *w)
 {
     int pos, col;
-    printf("Insert the answer: ");
-    scanf("%s", answer);
-    printf("Inset the given letter:");
-    scanf("%s", letters);
-    printf("Insert the position of the given letter, 1 for yellow and 2 for green:");
-    scanf("%d %d", &pos, &col);
+    //Insert the answer:
+    fscanf(w,"%s", answer);
+    //Inset the given letter:
+    fscanf(w,"%s", letters);
+    //Insert the position of the given letter, 1 for yellow and 2 for green:
+    fscanf(w,"%d %d", &pos, &col);
     position[pos] = col;
 }
 int verification(FILE *g)
@@ -209,13 +209,15 @@ void files(FILE *f)
 }
 int main()
 {
-    get_answer();
     FILE *f = fopen("Words.in","r");
     FILE *g = fopen("Order.out","w");
+    FILE *w = fopen("Answer.in","r");
+    get_answer(w);
     word_finder(f, g);
     files(f);
     fclose(f);
     fclose(g);
+    fclose(w);
 return 0;
 
 }
