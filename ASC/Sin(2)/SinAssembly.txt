@@ -1,0 +1,67 @@
+[bits 64]
+
+section .bss
+    x resq 1
+
+section .data
+    format1 db "%lf", 0
+    format2 db "%lf", 10, 0
+
+    unu dq 1.0
+    minus dq -1.0
+    doi dq 2.0
+
+section .text
+
+global main
+extern scanf
+extern printf
+
+sin:
+    movsd xmm1, xmm0
+    mulsd xmm0, xmm0
+    mulsd xmm0, [minus]
+    mov rcx, 0
+
+    movsd xmm2, [unu]
+    movsd xmm5, [doi]
+
+    pxor xmm3, xmm3
+
+top:
+    movsd xmm4, xmm1
+    divsd xmm4, xmm2
+    addsd xmm3, xmm4
+    
+    mulsd xmm1, xmm0
+    mulsd xmm2, xmm5
+    addsd xmm5, [unu]
+    mulsd xmm2, xmm5
+    addsd xmm5, [unu]
+
+    inc rcx
+    cmp rcx, 50
+    jl top
+
+    movsd xmm0, xmm3
+    ret
+
+main:
+    push rbp
+    mov rbp, rsp
+
+    mov eax, 0
+    mov rdi, format1
+    mov rsi, x
+    call scanf
+
+    movsd xmm0, [x]
+    call sin
+
+    mov eax, 1
+    mov rdi, format2
+    call printf
+
+    mov eax, 0
+    leave
+    ret
